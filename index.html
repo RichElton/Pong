@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>PONG</title>
+		<style>
+			canvas {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				background-color: black;
+				margin-top: -300px;
+				margin-left: -300px; 
+			}
+		</style>
+	</head>
+	<body>
+		<canvas height="600" width="600" id="mycanvas">
+			O seu browser não suporta esse elemento
+		</canvas>
+
+		<script>
+			// Pegando o meu objeto canvas.
+			var canvas = document.getElementById("mycanvas");
+
+			// Todos os elementos serão 2d.
+			var ctx = canvas.getContext("2d");
+
+			/* Desenhando um quadrado branco na posição: 0, 0, com 
+			tamanho 50, 50.
+			ctx.fillStyle = "white";
+			ctx.fillRect(0, 0, 50, 50); */
+
+			var teclas = {};
+			var bola = {
+				// Metade da altura da tela menos a metade da altura 
+				// e largura da bolinha.
+				x: canvas.width / 2 - 15,
+				y: canvas.height / 2 - 15,
+				altura: 30,
+				largura: 30,
+				// Direção em x(Começar indo para esquerda).
+				dirx: -1,
+				// Direção em y(Começar indo para direita).
+				diry: 1,
+				// Velocidade da bola.
+				modificador: 0,
+				speed: 50
+			};
+
+			// Bloco da esquerda.
+			var esquerda = {
+				// margin da borda da esquerda.
+				x: 10,
+				// No centro(altura / 2 - (metade da altura do bloco)).
+				y: canvas.height / 2 - 60,
+				altura: 120,
+				largura: 30,
+				score: 0,
+				speed: 15
+			};
+			// Bloco da direita.
+			var direita = {
+				// Margin da borda da direita(Deixando uma margin de 10).
+				x: 560,
+				// No centro(altura / 2 - (metade da altura do bloco)).
+				y: canvas.height / 2 - 60,
+				altura: 120,
+				largura: 30,
+				score: 0,
+				speed: 15
+			};
+
+			function desenha(){
+				// Desenhar.
+				ctx.fillStyle = "white";
+				ctx.fillRect(esquerda.x, esquerda.y, esquerda.largura, esquerda.altura);
+				ctx.fillRect(direita.x, direita.y, direita.largura, direita.altura);
+				ctx.fillRect(bola.x, bola.y, bola.largura, bola.altura);
+			}
+
+			desenha();
+		</script>
+
+	</body>
+</html>
