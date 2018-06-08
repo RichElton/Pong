@@ -42,11 +42,11 @@
 				largura: 30,
 				// Direção em x(Começar indo para esquerda).
 				dirx: -1,
-				// Direção em y(Começar indo para direita).
+				// Direção em y(Começar indo para baixo).
 				diry: 1,
 				// Velocidade da bola.
 				modificador: 0,
-				speed: 50
+				speed: 1
 			};
 
 			// Bloco da esquerda.
@@ -71,7 +71,6 @@
 				score: 0,
 				speed: 15
 			};
-
 			
 			// Usuario clicou alguma tecla(Evento keydown executa a função).
 			document.addEventListener("keydown", function(e) {
@@ -89,12 +88,60 @@
 				}
 			});
 
+			function moveBola(){
+				// Mudando a trajetório da bola se ela bater em um dos blocos.
+				if (bola.y + bola.altura >= esquerda.y && bola.y <= esquerda.y + esquerda.altura
+					&& bola.x <= esquerda.x + esquerda.largura) {
+						bola.dirx = 1;
+						bola.modificador += 0.1;
+				}
+				else if (bola.y + bola.altura >= direita.y && bola.y <= direita.y + direita.altura
+					&& bola.x + bola.largura >= direita.x) {
+						bola.dirx = -1;
+						bola.modificador += 0.1;
+				}
+				// Mudando a trajetório da bola se ela bater em uma das bordas.
+				if (bola.y <= 0){
+					bola.diry = 1;
+				} else if (bola.y >= 600){
+					bola.diry = -1;
+				}
+
+				// Se não colidir com nada.
+				if (bola.x < esquerda.x + esquerda.largura - 15) {
+					newGame("Player 2");
+				} else if (bola.x + bola.largura > direita.x + 15){
+					newGame("Player 1");
+				}
+
+				function newGame(vencedor){
+					if (vencedor == "Player 1"){
+						esquerda.score++;
+					} else {
+						direita.score++;
+					}
+
+					esquerda.y = canvas.height / 2 - esquerda.altura / 2;
+					direita.y = esquerda.y;
+					bola.y = canvas.height / 2 - bola.altura / 2;
+					bola.x = canvas.width / 2 - bola.largura / 2;
+					bola.modificador = 0;
+				}
+
+				// Se 'bola.dirx' for -1, ele vai decrementar e ir para esquerda.
+				bola.x += (bola.speed + bola.modificador) * bola.dirx;
+				// Se 'bola.dirx' for -1, ele vai decrementar e ir para cima.
+				bola.y += (bola.speed + bola.modificador) * bola.diry;
+			}
+
 			function desenha(){
 
 				// Limpando a canvas(0, 0, 600, 600).
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				// Chamando método de movimentação.
 				//movebloco();
+
+				moveBola();
 
 				// Desenhando os objetos na tela..
 				ctx.fillStyle = "white";
@@ -111,11 +158,16 @@
 				
 				// Score da direita(Player 2).
 				ctx.fillText("Player 2: " + direita.score, 460, 20);
-				setTimeout(desenha, 15);
 			};
-			desenha();
-			//setInterval(desenha, 15);
-		
+
+			ctx.fillStyle = "white";
+			ctx.font = "50px Arial";
+			ctx.fillText("Clique para iniciar!", 100, 300);
+
+			if (document.addEventListener("click", function(e){
+				alert("O jogo vai começar!");
+				setInterval(desenha, 5);
+			}), false);
 		</script>
 
 	</body>
